@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#111827" />
+<title>Padel Birthday Cup 2026</title>
+<style>
+  :root{
+    --bg:#f3f4f6;
+    --card:#ffffff;
+    --text:#111827;
+    --muted:#6b7280;
+    --line:#e5e7eb;
+    --soft:#f9fafb;
+    --accent:#111827;
+    --accent2:#374151;
+    --success:#15803d;
+    --warning:#b45309;
+    --danger:#b91c1c;
+    --radius:18px;
+    --shadow:0 8px 24px rgba(17,24,39,.08);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.4;
+  }
+  .app{max-width:920px;margin:0 auto;padding:16px 14px 36px}
+  header{
+    background:var(--accent);
+    color:#fff;
+    border-radius:22px;
+    padding:20px;
+    box-shadow:var(--shadow);
+    margin-bottom:14px;
+  }
+  header h1{margin:0 0 4px;font-size:25px}
+  header p{margin:0;color:#d1d5db;font-size:14px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.08);
+    color:#fff;border-radius:999px;padding:6px 10px;font-size:12px;
+  }
+  nav{
+    position:sticky;top:0;z-index:10;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+    padding:8px 0;background:var(--bg);
+  }
+  nav button{
+    border:1px solid var(--line);background:var(--card);color:var(--text);
+    border-radius:12px;padding:10px 8px;font-weight:700;font-size:13px;
+  }
+  nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  section{display:none}
+  section.active{display:block}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:14px;margin-bottom:12px;
+  }
+  .section-title{font-size:18px;font-weight:800;margin:2px 0 10px}
+  .muted{color:var(--muted);font-size:13px}
+  .round-head{
+    display:flex;justify-content:space-between;align-items:center;gap:8px;
+    margin-bottom:10px
+  }
+  .round-head h3{margin:0;font-size:15px}
+  .tag{font-size:11px;border-radius:999px;padding:5px 8px;background:var(--soft);border:1px solid var(--line);color:var(--muted)}
+  .match{
+    border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:8px;background:#fff
+  }
+  .match-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+  .match-title{font-size:12px;color:var(--muted)}
+  .court{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:4px 7px}
+  .teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin:11px 0}
+  .team{
+    padding:9px 10px;border-radius:11px;background:var(--soft);font-weight:750;font-size:14px;
+    min-height:42px;display:flex;align-items:center
+  }
+  .team.right{justify-content:flex-end;text-align:right}
+  .vs{font-size:12px;color:var(--muted);font-weight:800}
+  .result-row{display:flex;gap:8px;align-items:center}
+  .result-row input{
+    width:64px;text-align:center;font-size:17px;font-weight:800;padding:9px;
+    border:1px solid var(--line);border-radius:10px;background:#fff
+  }
+  .result-row button{
+    border:0;background:var(--accent);color:#fff;border-radius:10px;padding:10px 12px;font-weight:800
+  }
+  .result-display{
+    display:flex;justify-content:center;align-items:center;gap:12px;
+    font-size:20px;font-weight:900;margin:5px 0
+  }
+  .result-sub{font-size:11px;text-align:center;color:var(--muted)}
+  .tie-box{display:none;margin-top:8px;padding:9px;border:1px dashed var(--line);border-radius:10px}
+  .tie-box.show{display:block}
+  .tie-box label{font-size:12px;font-weight:700;margin-right:10px}
+  .action-row{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{
+    border:1px solid var(--line);background:var(--card);color:var(--text);padding:9px 11px;
+    border-radius:10px;font-weight:800;font-size:12px
+  }
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.danger{color:var(--danger)}
+  .standings{overflow:hidden;border:1px solid var(--line);border-radius:14px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:center}
+  th{background:var(--soft);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  tr:last-child td{border-bottom:0}
+  td:first-child,th:first-child{text-align:left}
+  .rank{font-weight:900;width:30px}
+  .team-name{font-weight:750}
+  .small{font-size:11px;color:var(--muted)}
+  .playoff-grid{display:grid;gap:10px}
+  .slot{
+    border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff
+  }
+  .slot h4{margin:0 0 8px;font-size:14px}
+  .slot-line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .slot-line:last-child{border-bottom:0}
+  .seed{color:var(--muted);font-size:11px;min-width:65px}
+  .slot-team{font-weight:800;flex:1}
+  .slot-score{font-size:16px;font-weight:900}
+  .info{
+    padding:10px 12px;border-radius:12px;background:var(--soft);border:1px solid var(--line);
+    font-size:12px;margin-bottom:10px
+  }
+  .success{color:var(--success)}
+  .warning{color:var(--warning)}
+  .danger-text{color:var(--danger)}
+  .empty{color:var(--muted);font-size:13px;padding:8px 0}
+  .footer-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+  @media(min-width:700px){
+    .playoff-grid{grid-template-columns:1fr 1fr}
+    .card{padding:16px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>🎾 Padel Birthday Cup</h1>
+    <p>3. oktobris · Padel MyFitness Sāga · 13:00–16:00</p>
+    <div class="meta">
+      <span class="pill">5 komandas</span>
+      <span class="pill">2 korti</span>
+      <span class="pill">10–15 min instrukcija</span>
+      <span class="pill">Round-robin → Playoff</span>
+    </div>
+  </header>
+
+  <nav>
+    <button class="active" data-tab="schedule">Grafiks</button>
+    <button data-tab="standings">Tabula</button>
+    <button data-tab="playoff">Playoff</button>
+  </nav>
+
+  <section id="schedule" class="active">
+    <div class="card">
+      <div class="section-title">Turnīra grafiks</div>
+      <div id="storageNotice" class="info" style="display:none"></div>
+      <div class="info">Punkti: <b>3 par uzvaru</b>, 0 par zaudējumu. Neizšķirts nav paredzēts — ja pēc laika rezultāts ir vienāds, izspēlē 1 golden point un reģistrē uzvarētāju.</div>
+      <div id="scheduleList"></div>
+    </div>
+  </section>
+
+  <section id="standings">
+    <div class="card">
+      <div class="section-title">Kopvērtējums</div>
+      <div class="muted" style="margin-bottom:10px">Secība: punkti → geimu starpība → gūtie geimi.</div>
+      <div class="standings">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Komanda</th><th>Sp</th><th>U</th><th>P</th><th>GF</th><th>GA</th><th>+/-</th><th>Pts</th>
+            </tr>
+          </thead>
+          <tbody id="standingsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="playoff">
+    <div class="card">
+      <div class="section-title">Playoff</div>
+      <div id="playoffInfo" class="info"></div>
+      <div class="playoff-grid">
+        <div class="slot">
+          <h4>🥈 Pusfināls 1 · 1. vieta vs 4. vieta</h4>
+          <div id="sf1Teams"></div>
+          <div id="sf1Editor"></div>
+        </div>
+        <div class="slot">
+          <h4>🥈 Pusfināls 2 · 2. vieta vs 3. vieta</h4>
+          <div id="sf2Teams"></div>
+          <div id="sf2Editor"></div>
+        </div>
+        <div class="slot" style="grid-column:1/-1">
+          <h4>🏆 FINĀLS</h4>
+          <div id="finalTeams"></div>
+          <div id="finalEditor"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="card">
+    <div class="footer-actions">
+      <button class="btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Uz augšu</button>
+      <button class="btn danger" onclick="resetTournament()">Atiestatīt visus rezultātus</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const teams = [
+  {id:'K', short:'Kristaps', name:'Team Kristaps', players:'Kristaps + Anete'},
+  {id:'G', short:'Gastons', name:'Team Gastons', players:'Gastons + Marta'},
+  {id:'S', short:'Sandis', name:'Team Sandis', players:'Sandis + Dita'},
+  {id:'E', short:'Emīls', name:'Team Emīls', players:'Emīls + Patrīcija'},
+  {id:'D', short:'Deivids', name:'Team Deivids', players:'Deivids + Santa'}
+];
+const teamById = Object.fromEntries(teams.map(t=>[t.id,t]));
+
+const roundRobin = [
+  {round:1,time:'13:15–13:35', matches:[
+    {id:'r1m1', court:'Kort 1', a:'K', b:'G'},
+    {id:'r1m2', court:'Kort 2', a:'S', b:'D'}
+  ], note:'Team Emīls pirmo spēli izlaiž.'},
+  {round:2,time:'13:40–14:00', matches:[
+    {id:'r2m1', court:'Kort 1', a:'K', b:'S'},
+    {id:'r2m2', court:'Kort 2', a:'G', b:'E'}
+  ]},
+  {round:3,time:'14:05–14:25', matches:[
+    {id:'r3m1', court:'Kort 1', a:'K', b:'D'},
+    {id:'r3m2', court:'Kort 2', a:'S', b:'E'}
+  ]},
+  {round:4,time:'14:30–14:50', matches:[
+    {id:'r4m1', court:'Kort 1', a:'K', b:'E'},
+    {id:'r4m2', court:'Kort 2', a:'G', b:'D'}
+  ]},
+  {round:5,time:'14:55–15:15', matches:[
+    {id:'r5m1', court:'Kort 1', a:'G', b:'S'},
+    {id:'r5m2', court:'Kort 2', a:'E', b:'D'}
+  ]}
+];
+
+const playoff = {
+  sf1:{id:'sf1', label:'Pusfināls 1', time:'15:20–15:40'},
+  sf2:{id:'sf2', label:'Pusfināls 2', time:'15:20–15:40'},
+  final:{id:'final', label:'FINĀLS', time:'15:40–16:00'}
+};
+
+const STORAGE_KEY='padel-birthday-cup-2026-v1';
+let storageOK = true;
+let results = {};
+try {
+  results = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+} catch (e) {
+  // Some iOS local-file previews block localStorage. Keep the app usable anyway.
+  storageOK = false;
+  results = {};
+}
+
+function save(){
+  if (storageOK) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(results)); }
+    catch (e) { storageOK = false; }
+  }
+  renderAll();
+}
+
+function teamLabel(id){
+  const t=teamById[id];
+  return t ? `<div><div class="team-name">${t.name}</div><div class="small">${t.players}</div></div>` : '—';
+}
+
+function allMatches(){
+  return roundRobin.flatMap(r=>r.matches);
+}
+
+function resultFor(id){
+  return results[id] || null;
+}
+
+function matchWinner(match){
+  const r=resultFor(match.id);
+  if(!r) return null;
+  if(r.winner) return r.winner;
+  if(Number.isFinite(r.a) && Number.isFinite(r.b) && r.a!==r.b) return r.a>r.b ? match.a : match.b;
+  return null;
+}
+
+function setResult(matchId, a, b, winner=null){
+  const na=Number(a), nb=Number(b);
+  if(!Number.isInteger(na) || !Number.isInteger(nb) || na<0 || nb<0){
+    alert('Ievadi veselus, pozitīvus vai 0 geimus.');
+    return;
+  }
+  if(na===nb && !winner){
+    alert('Neizšķirts nav paredzēts. Izspēlējiet golden point un izvēlieties uzvarētāju.');
+    return;
+  }
+  results[matchId]={a:na,b:nb,winner:winner || (na>nb ? getMatch(matchId).a : getMatch(matchId).b)};
+  save();
+}
+
+function clearResult(matchId){
+  delete results[matchId];
+  save();
+}
+
+function getMatch(id){
+  for(const r of roundRobin) for(const m of r.matches) if(m.id===id) return m;
+  for(const x of Object.values(playoff)) if(x.id===id) return playoffDynamicMatch(x.id);
+  return null;
+}
+
+function standings(){
+  const data=teams.map(t=>({
+    id:t.id, sp:0, u:0, p:0, gf:0, ga:0, diff:0, pts:0
+  }));
+  const map=Object.fromEntries(data.map(x=>[x.id,x]));
+
+  for(const m of allMatches()){
+    const r=resultFor(m.id);
+    const w=matchWinner(m);
+    if(!r || !w) continue;
+    map[m.a].sp++; map[m.b].sp++;
+    map[m.a].gf+=r.a; map[m.a].ga+=r.b;
+    map[m.b].gf+=r.b; map[m.b].ga+=r.a;
+    map[m.a].diff=map[m.a].gf-map[m.a].ga;
+    map[m.b].diff=map[m.b].gf-map[m.b].ga;
+    if(w===m.a){ map[m.a].u++; map[m.a].pts+=3; map[m.b].p++; }
+    else { map[m.b].u++; map[m.b].pts+=3; map[m.a].p++; }
+  }
+
+  return data.sort((a,b)=>
+    b.pts-a.pts ||
+    b.diff-a.diff ||
+    b.gf-a.gf ||
+    teamById[a.id].short.localeCompare(teamById[b.id].short,'lv')
+  );
+}
+
+function renderMatchEditor(match){
+  const r=resultFor(match.id);
+  const aTeam=teamById[match.a], bTeam=teamById[match.b];
+  const tie = r && Number(r.a)===Number(r.b);
+  const winner = r ? r.winner : null;
+
+  const wrapper=document.createElement('div');
+  wrapper.className='match';
+
+  const top=document.createElement('div');
+  top.className='match-top';
+  top.innerHTML=`<div class="match-title">${match.time || ''}</div><div class="court">${match.court || ''}</div>`;
+  wrapper.appendChild(top);
+
+  const teamsEl=document.createElement('div');
+  teamsEl.className='teams';
+  teamsEl.innerHTML=`
+    <div class="team">${teamLabel(match.a)}</div>
+    <div class="vs">VS</div>
+    <div class="team right">${teamLabel(match.b)}</div>`;
+  wrapper.appendChild(teamsEl);
+
+  if(r){
+    const winnerText = winner ? `${teamById[winner].short} uzvar` : 'Jāizvēlas golden-point uzvarētājs';
+    const display=document.createElement('div');
+    display.className='result-display';
+    display.innerHTML=`<span>${r.a}</span><span>–</span><span>${r.b}</span>`;
+    wrapper.appendChild(display);
+
+    const sub=document.createElement('div');
+    sub.className='result-sub';
+    sub.innerHTML=winner
+      ? `<span class="success">✓ ${winnerText}</span>`
+      : `<span class="warning">${winnerText}</span>`;
+    wrapper.appendChild(sub);
+
+    if(tie){
+      const tieBox=document.createElement('div');
+      tieBox.className='tie-box show';
+      tieBox.innerHTML=`
+        <label><input type="radio" name="tie-${match.id}" value="${match.a}" ${winner===match.a?'checked':''}> ${aTeam.short}</label>
+        <label><input type="radio" name="tie-${match.id}" value="${match.b}" ${winner===match.b?'checked':''}> ${bTeam.short}</label>
+        <button class="btn primary" style="margin-top:8px" onclick="saveTieWinner('${match.id}')">Saglabāt uzvarētāju</button>`;
+      wrapper.appendChild(tieBox);
+    }
+
+    const actions=document.createElement('div');
+    actions.className='action-row';
+    actions.style.marginTop='9px';
+    actions.innerHTML=`<button class="btn" onclick="editMatch('${match.id}')">Labot rezultātu</button>
+      <button class="btn danger" onclick="clearResult('${match.id}')">Notīrīt</button>`;
+    wrapper.appendChild(actions);
+  } else {
+    const row=document.createElement('div');
+    row.className='result-row';
+    row.innerHTML=`
+      <input id="${match.id}-a" type="number" min="0" inputmode="numeric" placeholder="0" aria-label="${aTeam.short} geimi">
+      <span>–</span>
+      <input id="${match.id}-b" type="number" min="0" inputmode="numeric" placeholder="0" aria-label="${bTeam.short} geimi">
+      <button onclick="saveMatch('${match.id}')">Saglabāt</button>`;
+    wrapper.appendChild(row);
+  }
+  return wrapper;
+}
+
+function editMatch(id){
+  const r=results[id];
+  const m=getMatch(id);
+  if(!m || !r) return;
+  const a=prompt(`${teamById[m.a].short} geimi:`, r.a);
+  if(a===null) return;
+  const b=prompt(`${teamById[m.b].short} geimi:`, r.b);
+  if(b===null) return;
+  const na=Number(a), nb=Number(b);
+  if(na===nb){
+    const w=prompt(`Neizšķirts. Uzvarētājs? (${teamById[m.a].short} vai ${teamById[m.b].short})`);
+    if(w===null) return;
+    const wid=w.toLowerCase().includes(teamById[m.a].short.toLowerCase())?m.a:
+              w.toLowerCase().includes(teamById[m.b].short.toLowerCase())?m.b:null;
+    if(!wid){alert('Neizdevās noteikt uzvarētāju.');return;}
+    setResult(id,na,nb,wid);
+  }else setResult(id,na,nb);
+}
+
+function saveMatch(id){
+  const m=getMatch(id);
+  const a=document.getElementById(`${id}-a`).value;
+  const b=document.getElementById(`${id}-b`).value;
+  setResult(id,a,b);
+}
+
+function saveTieWinner(id){
+  const radio=document.querySelector(`input[name="tie-${id}"]:checked`);
+  if(!radio){alert('Izvēlies golden-point uzvarētāju.');return;}
+  const r=results[id];
+  results[id]={...r,winner:radio.value};
+  save();
+}
+
+function renderSchedule(){
+  const notice = document.getElementById('storageNotice');
+  if (notice) {
+    notice.style.display = storageOK ? 'none' : 'block';
+    notice.innerHTML = 'ℹ️ Šis fails ir atvērts mobilā failu priekšskatā, kur rezultāti var netikt saglabāti pēc aizvēršanas. Turnīra laikā lapa tik un tā darbojas.';
+  }
+  const root=document.getElementById('scheduleList');
+  root.innerHTML='';
+  const intro=document.createElement('div');
+  intro.className='match';
+  intro.innerHTML=`
+    <div class="match-top"><div class="match-title">13:00–13:15</div><div class="court">Visiem</div></div>
+    <div style="margin-top:10px;font-weight:800">📝 Īsā instrukcija + iesildīšanās</div>
+    <div class="small" style="margin-top:4px">Īpaši komandām, kas padeli spēlē pirmo reizi.</div>`;
+  root.appendChild(intro);
+
+  roundRobin.forEach(r=>{
+    const c=document.createElement('div');
+    c.className='card';
+    c.style.boxShadow='none';
+    c.style.padding='0';
+    c.style.border='0';
+    c.style.marginTop='16px';
+    c.innerHTML=`<div class="round-head"><h3>Kārta ${r.round} · ${r.time}</h3><span class="tag">${r.note || 'Round-robin'}</span></div>`;
+    r.matches.forEach(m=>{
+      const clone=renderMatchEditor({...m,time:r.time});
+      c.appendChild(clone);
+    });
+    root.appendChild(c);
+  });
+}
+
+function renderStandings(){
+  const body=document.getElementById('standingsBody');
+  body.innerHTML='';
+  standings().forEach((s,i)=>{
+    const t=teamById[s.id];
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td class="rank">${i+1}</td>
+      <td style="text-align:left"><div class="team-name">${t.name}</div><div class="small">${t.players}</div></td>
+      <td>${s.sp}</td>
+      <td>${s.u}</td>
+      <td>${s.p}</td>
+      <td>${s.gf}</td>
+      <td>${s.ga}</td>
+      <td>${s.diff>0?'+':''}${s.diff}</td>
+      <td><b>${s.pts}</b></td>`;
+    body.appendChild(tr);
+  });
+}
+
+function dynamicPlayoffPair(id){
+  const s=standings();
+  if(s.length<4) return null;
+  if(id==='sf1') return {id:'sf1',a:s[0].id,b:s[3].id,court:'Kort 1',time:'15:20–15:40'};
+  if(id==='sf2') return {id:'sf2',a:s[1].id,b:s[2].id,court:'Kort 2',time:'15:20–15:40'};
+  if(id==='final'){
+    const sf1=results.sf1?.winner || null;
+    const sf2=results.sf2?.winner || null;
+    if(!sf1 || !sf2) return null;
+    return {id:'final',a:sf1,b:sf2,court:'Kort 1',time:'15:40–16:00'};
+  }
+  return null;
+}
+
+function playoffDynamicMatch(id){ return dynamicPlayoffPair(id); }
+
+function renderPlayoffMatchEditor(id){
+  const m=dynamicPlayoffPair(id);
+  if(!m) return `<div class="empty">Komandas tiks automātiski ievietotas pēc iepriekšējās kārtas.</div>`;
+
+  const r=results[id];
+  let html=`<div class="slot-line">
+    <div class="slot-team">${teamById[m.a].name}</div>
+    <div class="slot-score">${r ? r.a : '—'}</div>
+  </div>
+  <div class="slot-line">
+    <div class="slot-team">${teamById[m.b].name}</div>
+    <div class="slot-score">${r ? r.b : '—'}</div>
+  </div>`;
+
+  if(!r){
+    html += `<div class="result-row" style="margin-top:10px">
+      <input id="${id}-a" type="number" min="0" inputmode="numeric" placeholder="0">
+      <span>–</span>
+      <input id="${id}-b" type="number" min="0" inputmode="numeric" placeholder="0">
+      <button onclick="savePlayoff('${id}')">Saglabāt</button>
+    </div>`;
+  }else{
+    const winner=matchWinner(m);
+    html += `<div class="result-sub" style="margin-top:7px">${winner ? `<span class="success">✓ ${teamById[winner].name} uzvar</span>` : '<span class="warning">Jāizvēlas uzvarētājs</span>'}</div>`;
+    if(Number(r.a)===Number(r.b)){
+      html += `<div class="tie-box show" style="margin-top:8px">
+        <label><input type="radio" name="tie-${id}" value="${m.a}" ${r.winner===m.a?'checked':''}> ${teamById[m.a].short}</label>
+        <label><input type="radio" name="tie-${id}" value="${m.b}" ${r.winner===m.b?'checked':''}> ${teamById[m.b].short}</label>
+        <button class="btn primary" style="margin-top:8px" onclick="savePlayoffTie('${id}')">Saglabāt uzvarētāju</button>
+      </div>`;
+    }
+    html += `<div class="action-row" style="margin-top:9px">
+      <button class="btn" onclick="editPlayoff('${id}')">Labot</button>
+      <button class="btn danger" onclick="clearPlayoff('${id}')">Notīrīt</button>
+    </div>`;
+  }
+  return html;
+}
+
+function renderPlayoffTeams(){
+  const s=standings();
+  const info=document.getElementById('playoffInfo');
+  const played=s.filter(x=>x.sp>0).length;
+  const allDone=allMatches().every(m=>!!matchWinner(m));
+  if(!allDone){
+    info.innerHTML=`<span class="warning">Playoff izlikums parādīsies automātiski, kad round-robin spēles būs ievadītas. Pašlaik ${allMatches().filter(m=>!!matchWinner(m)).length}/10 spēles ir pabeigtas.</span>`;
+  }else{
+    info.innerHTML=`<b>Automātiskais izlikums:</b> 1. vs 4. un 2. vs 3. Pēc pusfinālu rezultātiem fināls aizpildīsies automātiski.`;
+  }
+
+  const sf1=document.getElementById('sf1Teams');
+  const sf2=document.getElementById('sf2Teams');
+  const fin=document.getElementById('finalTeams');
+  sf1.innerHTML=renderPlayoffPair('sf1');
+  sf2.innerHTML=renderPlayoffPair('sf2');
+  fin.innerHTML=renderPlayoffPair('final');
+
+  document.getElementById('sf1Editor').innerHTML=renderPlayoffMatchEditor('sf1');
+  document.getElementById('sf2Editor').innerHTML=renderPlayoffMatchEditor('sf2');
+  document.getElementById('finalEditor').innerHTML=renderPlayoffMatchEditor('final');
+}
+
+function renderPlayoffPair(id){
+  const m=dynamicPlayoffPair(id);
+  if(!m) return `<div class="empty">Gaida round-robin rezultātus.</div>`;
+  return `
+    <div class="slot-line"><div class="seed">${seedLabel(id,1)}</div><div class="slot-team">${teamById[m.a].name}</div></div>
+    <div class="slot-line"><div class="seed">${seedLabel(id,2)}</div><div class="slot-team">${teamById[m.b].name}</div></div>`;
+}
+
+function seedLabel(id,n){
+  if(id==='sf1') return n===1 ? '1. vieta' : '4. vieta';
+  if(id==='sf2') return n===1 ? '2. vieta' : '3. vieta';
+  const sf1=results.sf1?.winner, sf2=results.sf2?.winner;
+  return n===1 ? (sf1?'SF1 uzvarētājs':'') : (sf2?'SF2 uzvarētājs':'');
+}
+
+function savePlayoff(id){
+  const m=dynamicPlayoffPair(id);
+  if(!m) return;
+  const a=document.getElementById(`${id}-a`).value;
+  const b=document.getElementById(`${id}-b`).value;
+  const na=Number(a), nb=Number(b);
+  if(!Number.isInteger(na) || !Number.isInteger(nb) || na<0 || nb<0){alert('Ievadi korektus geimus.');return;}
+  if(na===nb){alert('Ja rezultāts ir vienāds, izspēlē golden point un pēc tam izvēlies uzvarētāju.');return;}
+  results[id]={a:na,b:nb,winner:na>nb?m.a:m.b};
+  save();
+}
+
+function savePlayoffTie(id){
+  const radio=document.querySelector(`input[name="tie-${id}"]:checked`);
+  if(!radio){alert('Izvēlies uzvarētāju.');return;}
+  results[id]={...results[id],winner:radio.value};
+  save();
+}
+
+function clearPlayoff(id){delete results[id];save();}
+function editPlayoff(id){
+  const m=dynamicPlayoffPair(id), r=results[id];
+  if(!m||!r)return;
+  const a=prompt(`${teamById[m.a].short} geimi:`,r.a); if(a===null)return;
+  const b=prompt(`${teamById[m.b].short} geimi:`,r.b); if(b===null)return;
+  const na=Number(a), nb=Number(b);
+  if(na===nb){
+    const w=prompt(`Neizšķirts. Uzvarētājs? (${teamById[m.a].short} vai ${teamById[m.b].short})`);
+    if(w===null)return;
+    const wid=w.toLowerCase().includes(teamById[m.a].short.toLowerCase())?m.a:
+              w.toLowerCase().includes(teamById[m.b].short.toLowerCase())?m.b:null;
+    if(!wid){alert('Neizdevās noteikt uzvarētāju.');return;}
+    results[id]={a:na,b:nb,winner:wid};
+  }else results[id]={a:na,b:nb,winner:na>nb?m.a:m.b};
+  save();
+}
+
+function resetTournament(){
+  if(confirm('Tiešām notīrīt visus turnīra rezultātus?')){
+    results={}; save();
+  }
+}
+
+function renderAll(){
+  renderSchedule();
+  renderStandings();
+  renderPlayoffTeams();
+}
+
+document.querySelectorAll('nav button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+renderAll();
+</script>
+</body>
+</html>
